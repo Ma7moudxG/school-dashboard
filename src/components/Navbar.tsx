@@ -4,11 +4,13 @@ import React from "react";
 const Navbar = () => {
   return (
     <div className="flex item-center justify-between p-4">
-      <div className="hidden md:flex items-center gap-2 text-sm rounded-full  ring-[1.5px] ring-gray-300 px-2">
+      <div className="hidden md:flex items-center gap-2 text-sm rounded-full  ring-[1.5px] ring-gray-300 px-2 focus:ring-purple-500">
         <Image src="/search.png" alt="search" width={14} height={14} />
         <input type="text" placeholder="Search..." 
             className="w-[200px] p-2 bg-transparent"
-        />
+        >
+            
+        </input>
       </div>
       <div className="flex items-center gap-6 justify-end w-full">
         <div className="bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer relative">
