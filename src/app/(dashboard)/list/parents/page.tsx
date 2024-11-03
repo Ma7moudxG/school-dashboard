@@ -51,8 +51,8 @@ const ParentsList = () => {
           <Link href={`/list/teachers/${item.id}`}>
             <button className="w-7 h-7 flex items-center justify-center rounded-full bg-sky">
               <Image 
-                src="/view.png"
-                alt="view"
+                src="/edit.png"
+                alt="edit"
                 width={16}
                 height={16}
               />
