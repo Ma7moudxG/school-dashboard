@@ -3,14 +3,23 @@ import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { lessonsData, role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { auth } from "@clerk/nextjs/server";
 import { Class, Lesson, Prisma, Subject, Teacher } from "@prisma/client";
 import Image from "next/image";
 
 type LessonList = Lesson & { teacher: Teacher } & { subject: Subject } & { class: Class}
 
+const LessonListPage =  async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string  | undefined };
+}) => {
+
+  const { userId, sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as { role?: string })?.role;
+  
 const columns = [
   {
     header: "Subject Name",
@@ -25,10 +34,10 @@ const columns = [
     accessor: "teacher",
     className: "hidden md:table-cell",
   },
-  {
+  ...(role === "admin" ? [{
     header: "Actions",
     accessor: "action",
-  },
+  }] : [] ),
 ];
 
 const renderRow = (item: LessonList) => (
@@ -52,11 +61,7 @@ const renderRow = (item: LessonList) => (
   </tr>
 );
 
-const LessonListPage =  async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string  | undefined };
-}) => {
+
 
   const { page, ...queryParams } = searchParams
 

@@ -51,7 +51,7 @@ const FormModal = ({
     type === "create"
       ? "bg-lamaYellow"
       : type === "update"
-      ? "bg-lamaSky"
+      ? "bg-sky"
       : "bg-lamaPurple";
 
   const [open, setOpen] = useState(false);

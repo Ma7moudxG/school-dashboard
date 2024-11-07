@@ -2,12 +2,9 @@ import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import {
-  resultsData,
-  role,
-} from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { auth } from "@clerk/nextjs/server";
 import { Prisma, Result } from "@prisma/client";
 import Image from "next/image";
 
@@ -23,6 +20,15 @@ type ResultList = {
   startTime: Date;
 
 }
+
+const ResultListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string  | undefined };
+}) => {
+
+  const { userId, sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as { role?: string })?.role;
 
 const columns = [
   {
@@ -53,10 +59,10 @@ const columns = [
     accessor: "date",
     className: "hidden md:table-cell",
   },
-  {
+  ...(role === "admin" || role === "teacher" ? [{
     header: "Actions",
     accessor: "action",
-  },
+  }] : [] ),
 ];
 
 const renderRow = (item: ResultList) => (
@@ -83,11 +89,7 @@ const renderRow = (item: ResultList) => (
   </tr>
 );
 
-const ResultListPage = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string  | undefined };
-}) => {
+
 
   const { page, ...queryParams } = searchParams
 
@@ -117,6 +119,32 @@ const ResultListPage = async ({
           }
       }
     }
+  }
+
+  // ROLE CONDITIONS 
+
+  switch (role) {
+    case "admin":
+      break;
+
+    case "teacher":
+      query.OR = [
+        { exam: { lesson: { teacherId: userId! }}},
+        { assignment: { lesson: { teacherId: userId! }}},
+      ]
+    break;
+    
+    case "student":
+      query.studentId = userId!
+    break;
+
+    case "parent":
+      query.student = {
+        parentId: userId!,
+      }
+    break;
+    default:
+      break;
   }
 
   const [ dataRes, count ]  = await prisma.$transaction([
