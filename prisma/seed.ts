@@ -1,4 +1,5 @@
 import { Day, PrismaClient, UserSex } from "@prisma/client";
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
 const prisma = new PrismaClient();
 
 async function main() {
@@ -206,6 +207,7 @@ async function main() {
 
 main()
   .then(async () => {
+    console.log("seeeeeeeeeeeeeeed")
     await prisma.$disconnect();
   })
   .catch(async (e) => {
