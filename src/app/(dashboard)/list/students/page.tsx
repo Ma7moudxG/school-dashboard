@@ -1,4 +1,4 @@
-import FormModal from "@/components/FormModal";
+import FormContainer from "@/components/FormContainer";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
@@ -76,7 +76,7 @@ const renderRow = (item: StudentList) => (
             />
           </button>
         </Link>
-        {role === "admin" && <FormModal table="student" type="delete" id={item.id} />}
+        {role === "admin" && <FormContainer table="student" type="delete" id={item.id} />}
       </div>
     </td>
   </tr>
@@ -146,7 +146,7 @@ const renderRow = (item: StudentList) => (
               <Image src="/sort.png" alt="sort" width={14} height={14} />
             </button>
 
-            {role === "admin" && <FormModal table="student" type="create" />}
+            {role === "admin" && <FormContainer table="student" type="create" />}
           </div>
         </div>
       </div>
